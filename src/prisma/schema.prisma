@@ -1,0 +1,40 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Price {
+  id  Int @id @default(autoincrement())
+  aggregator  String
+  price_id  Int
+  product_name  String @db.VarChar(512)
+  category_name String
+  price_supplier  Float
+  price_min Float
+  price_adapted Float
+  margin_before Float
+  margin_after Float
+  date_public DateTime?
+  price_publisher String
+  price_column String?
+  hotline_url String
+  data_parse  DateTime
+  data_parse_human DateTime
+  date_comtrading DateTime? 
+  source_file String
+}
+
+model Seller {
+  id  Int @id @default(autoincrement())
+  prod_id Float
+  aggregator_id Int
+  dt  DateTime
+  price Float
+  seller  String
+  delivery_kiev Boolean
+  delivery_free Boolean
+}

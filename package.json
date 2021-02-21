@@ -1,0 +1,28 @@
+{
+  "name": "json-to-mysql",
+  "version": "0.0.1",
+  "main": "index.js",
+  "license": "MIT",
+  "prisma": {
+    "schema": "src/prisma/schema.prisma"
+  },
+  "scripts": {
+    "ts": "tsc -p . -w",
+    "build": "tsc -p .",
+    "dev": "nodemon dist/index.js",
+    "start": "node dist/index.js",
+    "generate": "prisma generate",
+    "migrate": "prisma migrate deploy --preview-feature",
+    "migrate:dev": "prisma migrate dev --preview-feature"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.31",
+    "@types/tar-stream": "^2.2.0"
+  },
+  "dependencies": {
+    "@prisma/client": "^2.17.0",
+    "dotenv": "^8.2.0",
+    "tar-stream": "^2.2.0",
+    "zlib": "^1.0.5"
+  }
+}
