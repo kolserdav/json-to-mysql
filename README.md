@@ -6,6 +6,10 @@ node v^14.15.4
 yarn v^1.22.10
 ```
 ## Установка
+Сначала устанавливаем глобальные зависимости через `npm`:
+```
+npm i -g typescript prisma yarn
+```
 Клонируем исходный код из репозитория
 ```
 git clone https://github.com/kolserdav/json-to-mysql.git
@@ -29,6 +33,10 @@ yarn install
 DATABASE_URL=mysql://arch:1234@localhost:3306/json_db
 # Полный путь до папки с архивами json файлов
 DATA_DIR=/home/kol/Projects/json-to-mysql/data
+```
+Генерируем типы для компиляции 
+```
+yarn generate
 ```
 Создаем нужные таблицы из миграций
 ```
