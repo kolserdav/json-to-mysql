@@ -151,13 +151,15 @@ class Module {
     return new Promise((resolve) => {
       // Проверяет не сохранено ли раньше и записывает в базу
       const isSaved = this.checkSellerByDate(seller.price, seller.dt);
+      let newDate = new Date(seller.dt);
+      newDate = isNaN(newDate.getDay()) ? new Date() : newDate;
       isSaved.then((data) => {
         if (data === null) {
           const saveRes = this.prisma.seller.create({
             data: {
               prod_id: parseInt(seller.prod_id, 10),
               aggregator_id: parseInt(seller.aggregator_id, 10),
-              dt: new Date(seller.dt),
+              dt: newDate,
               seller: seller.seller,
               price: seller.price,
               delivery_free: seller.delivery_free,
