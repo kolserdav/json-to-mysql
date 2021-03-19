@@ -5,7 +5,7 @@ import Module from './Module';
 import Console from './lib/Console'; 
 import * as T from './types';
 
-const module = new Module();
+let module = new Module();
 
 /**
  * Регулярное выражение названия архива прайсов
@@ -25,10 +25,13 @@ const dir = module.parseDataDir();
       const fileData = await module.getFileData<T.SourcePrices>('price');
       Console.info(`Write in table "Price" from archive "${fileName}"...`);
       // Записывает каждый прайс
+      let pricePromises = [];
       for (let prop in fileData) {
         const price = fileData[prop];
-        await module.saveOnePrice(price, fileName);
+        pricePromises.push(module.saveOnePrice(price, fileName));
       }
+      await Promise.all(pricePromises);
+      pricePromises = [];
       Console.info(`Prices from archive "${fileName}" write successfully!`);
       // Получает имя архива продавцов из имени архива прайсов
       const sellersFilename = fileName.replace('price', 'sellers');
@@ -36,11 +39,20 @@ const dir = module.parseDataDir();
       await module.extractArchive(sellersFilename, 'sellers');
       const fileSellersData = await module.getFileData<T.SourceSeller[]>('sellers');
       Console.info(`Write in table "Sellers" from archive "${sellersFilename}"...`);
+      let sellerPromises = [];
       for (let i = 0; fileSellersData[i]; i++) {
         const seller = fileSellersData[i];
-        await module.saveOneSeller(seller, fileName);
+        sellerPromises.push(module.saveOneSeller(seller));
+        if (i%10000 === 0) {
+          await Promise.all(sellerPromises);
+          sellerPromises = [];
+        }
       }
+      await Promise.all(sellerPromises);
+      sellerPromises = [];
+      Console.info(`Sellers from archive "${sellersFilename}" write successfully!`);
     }
   }
   await module.disconnect();
+  Console.info('All files are transferred!');
 })();
